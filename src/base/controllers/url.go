@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"base/service"
+	"base/services"
 	"fmt"
 	//"encoding/json"
 )
