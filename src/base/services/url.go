@@ -3,12 +3,15 @@ package service
 import (
 	"crypto/md5"
 	"encoding/hex"
-	"encoding/json"
+	//"encoding/json"
 	"errors"
 	"fmt"
+	"log"
 	"math/rand"
 	"strconv"
 	"time"
+
+	"github.com/pquerna/ffjson/ffjson"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/validation"
@@ -19,11 +22,12 @@ type MetaParams struct {
 	Version   string `valid:"Required"`
 	SecretKey string `valid:"Required"`
 	RequestID string `valid:"Required"`
+	IP        string `valid:"IP"`
 }
 
 type UrlsParams struct {
 	LongUrl string `valid:"Required"`
-	Ip      string `valid:"Required"`
+	IP      string `valid:"IP"`
 }
 
 type DataParams struct {
@@ -73,8 +77,22 @@ func (r *Url) GoShorten(params []byte) (shortUrl interface{}, errParams ErrParam
 
 	//将传递过来多json raw解析到struct
 	var u Url
-	json.Unmarshal(params, &u)
+	ffjson.Unmarshal(params, &u)
+	ffjson.Unmarshal(params, &u.Data.Urls)
 	fmt.Println("json解析:", u)
+
+	//测试嵌套验证
+	vtest := validation.Validation{}
+	b, err := vtest.Valid(&u)
+	if err != nil {
+		// handle error
+		fmt.Println("测试验证报错", err)
+	}
+	if !b {
+		for _, err := range vtest.Errors {
+			log.Println("测试验证不通过", err.Key, "-", err.Message)
+		}
+	}
 
 	//------------------------验证参数start------------------------
 	//初始化验证
