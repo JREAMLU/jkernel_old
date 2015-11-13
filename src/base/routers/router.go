@@ -21,7 +21,7 @@ func init() {
 	 */
 	base := beego.NewNamespace("/v1",
 		beego.NSCond(func(ctx *context.Context) bool {
-			if ctx.Input.Domain() == "base.jream.lu" {
+			if ctx.Input.Domain() == "base.jream.me" {
 				return true
 			}
 			return false

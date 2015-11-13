@@ -34,6 +34,14 @@ type DataParams struct {
 	Urls []UrlsParams `valid:"Required"`
 }
 
+type Meta struct {
+	Source    string `valid:"Required"`
+	Version   string `valid:"Required"`
+	SecretKey string `valid:"Required"`
+	RequestID string `valid:"Required"`
+	IP        string `valid:"IP"`
+}
+
 type Url struct {
 	Meta MetaParams `valid:"Required"`
 	Data DataParams `valid:"Required"`
@@ -72,13 +80,13 @@ func (r *Url) Valid(v *validation.Validation) {
  *	@params		params []byte	参数
  *	@return 	slice
  */
-func (r *Url) GoShorten(params []byte) (shortUrl interface{}, errParams ErrParams) {
-	fmt.Println("接受的参数:", string(params))
+func (r *Url) GoShorten(rawDataBody []byte, rawMetaHeader interface{}) (shortUrl interface{}, errParams ErrParams) {
+	fmt.Println("接受的参数:", string(rawDataBody))
 
 	//将传递过来多json raw解析到struct
 	var u Url
-	ffjson.Unmarshal(params, &u)
-	ffjson.Unmarshal(params, &u.Data.Urls)
+	ffjson.Unmarshal(rawDataBody, &u)
+	ffjson.Unmarshal(rawDataBody, &u.Data.Urls)
 	fmt.Println("json解析:", u)
 
 	//测试嵌套验证

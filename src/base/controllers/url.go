@@ -17,11 +17,15 @@ type UrlController struct {
  */
 func (r *UrlController) GoShorten() {
 	//接受参数 json raw
-	params := r.Ctx.Input.RequestBody
+	rawDataBody := r.Ctx.Input.RequestBody
+	rawMetaHeader := r.Ctx.Input.Request.Header
+	for key, val := range rawMetaHeader {
+		fmt.Println(key, ": ", val)
+	}
 
 	//调用servcie方法, 将参数传递过去
 	var su service.Url
-	shorten, err := su.GoShorten(params)
+	shorten, err := su.GoShorten(rawDataBody, rawMetaHeader)
 
 	var data = make(map[string]interface{})
 	if err.Err != nil {
