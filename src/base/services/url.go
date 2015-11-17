@@ -1,4 +1,4 @@
-package service
+package services
 
 import (
 	"crypto/md5"
@@ -6,10 +6,11 @@ import (
 	//"encoding/json"
 	"errors"
 	"fmt"
-	"log"
 	"math/rand"
 	"strconv"
 	"time"
+
+	"base/functions/validate"
 
 	"github.com/pquerna/ffjson/ffjson"
 
@@ -34,12 +35,12 @@ type DataParams struct {
 	Urls []UrlsParams `valid:"Required"`
 }
 
-type Meta struct {
-	Source    string `valid:"Required"`
-	Version   string `valid:"Required"`
-	SecretKey string `valid:"Required"`
-	RequestID string `valid:"Required"`
-	IP        string `valid:"IP"`
+type MetaHeader struct {
+	Source    []string `valid:"Required"`
+	Version   []string `valid:"Required"`
+	SecretKey []string `valid:"Required"`
+	RequestID []string `valid:"Required"`
+	IP        []string `valid:"IP"`
 }
 
 type Url struct {
@@ -68,9 +69,7 @@ func GetParams(url Url) Url {
 /**
  *	自定义多valid
  */
-func (r *Url) Valid(v *validation.Validation) {
-
-}
+func (r *Url) Valid(v *validation.Validation) {}
 
 /**
  *	@auther		jream.lu
@@ -80,27 +79,44 @@ func (r *Url) Valid(v *validation.Validation) {
  *	@params		params []byte	参数
  *	@return 	slice
  */
-func (r *Url) GoShorten(rawDataBody []byte, rawMetaHeader interface{}) (shortUrl interface{}, errParams ErrParams) {
-	fmt.Println("接受的参数:", string(rawDataBody))
+func (r *Url) GoShorten(rawDataBody []byte, rawMetaHeader map[string][]string) (shortUrl interface{}, errParams ErrParams) {
+	fmt.Println("接受的参数 body:", string(rawDataBody))
+	fmt.Println("接受的参数 header:", rawMetaHeader)
 
 	//将传递过来多json raw解析到struct
 	var u Url
 	ffjson.Unmarshal(rawDataBody, &u)
 	ffjson.Unmarshal(rawDataBody, &u.Data.Urls)
-	fmt.Println("json解析:", u)
+	fmt.Println("Url json解析:", u)
+
+	/*
+	 * 1.map转json
+	 * 2.json转slice
+	 * 3.解析到struct
+	 */
+	rmh, _ := ffjson.Marshal(rawMetaHeader)
+	fmt.Println("rawMetaHeader json:", string(rmh))
+	var mh MetaHeader
+	ffjson.Unmarshal(rmh, &mh)
+	fmt.Println("meta json解析:", mh)
 
 	//测试嵌套验证
-	vtest := validation.Validation{}
-	b, err := vtest.Valid(&u)
-	if err != nil {
-		// handle error
-		fmt.Println("测试验证报错", err)
-	}
-	if !b {
-		for _, err := range vtest.Errors {
-			log.Println("测试验证不通过", err.Key, "-", err.Message)
+	// vtest := validation.Validation{}
+
+	validate.InputParams(&mh, &u.Meta)
+
+	/*
+		b, err := vtest.Valid(&u.Meta)
+		if err != nil {
+			// handle error
+			fmt.Println("b测试验证报错", err)
 		}
-	}
+		if !b {
+			for _, err := range vtest.Errors {
+				log.Println("b测试验证不通过", err.Key, "-", err.Message)
+			}
+		}
+	*/
 
 	//------------------------验证参数start------------------------
 	//初始化验证

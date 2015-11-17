@@ -20,11 +20,11 @@ func (r *UrlController) GoShorten() {
 	rawDataBody := r.Ctx.Input.RequestBody
 	rawMetaHeader := r.Ctx.Input.Request.Header
 	for key, val := range rawMetaHeader {
-		fmt.Println(key, ": ", val)
+		fmt.Println(key, ": ", val[0])
 	}
 
 	//调用servcie方法, 将参数传递过去
-	var su service.Url
+	var su services.Url
 	shorten, err := su.GoShorten(rawDataBody, rawMetaHeader)
 
 	var data = make(map[string]interface{})
