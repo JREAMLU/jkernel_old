@@ -1,15 +1,12 @@
 package services
 
 import (
-	"crypto/md5"
-	"encoding/hex"
+
 	//"encoding/json"
 	"errors"
 	"fmt"
-	"math/rand"
-	"strconv"
-	"time"
 
+	"base/functions/url"
 	"base/functions/validate"
 
 	"github.com/pquerna/ffjson/ffjson"
@@ -101,22 +98,7 @@ func (r *Url) GoShorten(rawDataBody []byte, rawMetaHeader map[string][]string) (
 	fmt.Println("meta json解析:", mh)
 
 	//测试嵌套验证
-	// vtest := validation.Validation{}
-
-	validate.InputParams(&mh, &u.Meta)
-
-	/*
-		b, err := vtest.Valid(&u.Meta)
-		if err != nil {
-			// handle error
-			fmt.Println("b测试验证报错", err)
-		}
-		if !b {
-			for _, err := range vtest.Errors {
-				log.Println("b测试验证不通过", err.Key, "-", err.Message)
-			}
-		}
-	*/
+	validate.InputParamsCheck(&mh, &u.Meta)
 
 	//------------------------验证参数start------------------------
 	//初始化验证
@@ -187,7 +169,7 @@ func (r *Url) GoShorten(rawDataBody []byte, rawMetaHeader map[string][]string) (
 	//进行shorten
 	var list = make(map[string]interface{})
 	for _, val := range u.Data.Urls {
-		list[val.LongUrl] = GetShortenUrl(val.LongUrl, beego.AppConfig.String("ShortUrl"))
+		list[val.LongUrl] = url.GetShortenUrl(val.LongUrl, beego.AppConfig.String("ShortenDomain"))
 	}
 
 	var dl dataList
@@ -198,93 +180,4 @@ func (r *Url) GoShorten(rawDataBody []byte, rawMetaHeader map[string][]string) (
 
 	errParams.Status = 0
 	return dl, errParams
-}
-
-//----------------------------------------------短网址算法--------------------------------------------------
-func GetShortenUrl(url, mainUrl string) string {
-	//随机
-	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	random := r.Intn(4)
-
-	shortUrl := ShortUrl(url)
-	sUrl := shortUrl[random]
-
-	lastUrl := mainUrl + sUrl
-	fmt.Println(lastUrl)
-	return lastUrl
-}
-
-func ShortUrl(url string) []string {
-	//62位的密码
-	base62 := [...]string{"a", "b", "c", "d", "e", "f", "g", "h",
-		"i", "j", "k", "l", "m", "n", "o", "p",
-		"q", "r", "s", "t", "u", "v", "w", "x",
-		"y", "z", "A", "B", "C", "D", "E", "F",
-		"G", "H", "I", "J", "K", "L", "M", "N",
-		"O", "P", "Q", "R", "S", "T", "U", "V",
-		"W", "X", "Y", "Z", "0", "1", "2", "3",
-		"4", "5", "6", "7", "8", "9"}
-
-	//	fmt.Println(base62)
-	//传进来的url进行md5
-	h := md5.New()
-	h.Write([]byte(url))
-
-	//hex.EncodeToString(h.Sum(nil)) -> md5
-	hex := hex.EncodeToString(h.Sum(nil))
-	hexLen := len(hex)
-	subHexLen := hexLen / 8
-
-	var outPut []string
-	for i := 0; i < subHexLen; i++ {
-		//截取md5的长度 按8个 截4段
-		subHex := SubString(hex, i*8, 8)
-
-		//每段与0x组成16进制
-		strHex := "0x" + subHex
-
-		//将string转换成int 16进制
-		sH, _ := strconv.ParseInt(strHex, 0, 64)
-
-		//做运算
-		valInt := 0x3FFFFFFF & (1 * sH)
-
-		var out string
-		for j := 0; j < 6; j++ {
-			val := 0x0000003D & valInt
-			out += base62[val]
-			valInt = valInt >> 5
-			//			fmt.Println(valInt)
-		}
-
-		//添加到outPut 切片里
-		outPut = append(outPut, out)
-		//		fmt.Println(outPut)
-	}
-
-	return outPut
-}
-
-/**
- * 截取字符串长度
- */
-func SubString(str string, begin, length int) (substr string) {
-	// 将字符串的转换成[]rune
-	rs := []rune(str)
-	lth := len(rs)
-
-	// 简单的越界判断
-	if begin < 0 {
-		begin = 0
-	}
-	if begin >= lth {
-		begin = lth
-	}
-	end := begin + length
-	if end > lth {
-		end = lth
-	}
-
-	// 返回子串
-	return string(rs[begin:end])
 }

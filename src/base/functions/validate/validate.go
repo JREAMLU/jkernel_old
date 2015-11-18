@@ -7,7 +7,15 @@ import (
 	"github.com/astaxie/beego/validation"
 )
 
-func InputParams(params ...interface{}) int {
+/**
+ *	@auther		jream.lu
+ *	@intro		入参验证
+ *	@logic
+ *	@todo		返回值
+ *	@params		params ...interface{}	切片指针
+ *	@return 	?
+ */
+func InputParamsCheck(params ...interface{}) int {
 
 	valid := validation.Validation{}
 
