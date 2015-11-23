@@ -37,6 +37,7 @@ type MetaHeader struct {
 	Version   []string `valid:"Required"`
 	SecretKey []string `valid:"Required"`
 	RequestID []string `valid:"Required"`
+	Token     []string `valid:"Required"`
 	IP        []string `valid:"IP"`
 }
 
