@@ -1,4 +1,4 @@
-package validate
+package cores
 
 import (
 	"fmt"
@@ -35,3 +35,7 @@ func InputParamsCheck(params ...interface{}) int {
 	}
 	return 1
 }
+
+//meta参数验证
+
+//request id增加

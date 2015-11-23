@@ -6,8 +6,8 @@ import (
 	"errors"
 	"fmt"
 
-	"base/functions/url"
-	"base/functions/validate"
+	"base/cores"
+	"base/cores/url"
 
 	"github.com/pquerna/ffjson/ffjson"
 
@@ -98,7 +98,7 @@ func (r *Url) GoShorten(rawDataBody []byte, rawMetaHeader map[string][]string) (
 	fmt.Println("meta json解析:", mh)
 
 	//测试嵌套验证
-	validate.InputParamsCheck(&mh, &u.Meta)
+	cores.InputParamsCheck(&mh, &u.Meta)
 
 	//------------------------验证参数start------------------------
 	//初始化验证
