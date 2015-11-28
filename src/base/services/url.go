@@ -6,8 +6,8 @@ import (
 	"errors"
 	"fmt"
 
-	"base/functions/url"
-	"base/functions/validate"
+	"base/cores"
+	"base/cores/url"
 
 	"github.com/pquerna/ffjson/ffjson"
 
@@ -37,6 +37,7 @@ type MetaHeader struct {
 	Version   []string `valid:"Required"`
 	SecretKey []string `valid:"Required"`
 	RequestID []string `valid:"Required"`
+	Token     []string `valid:"Required"`
 	IP        []string `valid:"IP"`
 }
 
@@ -98,7 +99,7 @@ func (r *Url) GoShorten(rawDataBody []byte, rawMetaHeader map[string][]string) (
 	fmt.Println("meta json解析:", mh)
 
 	//测试嵌套验证
-	validate.InputParamsCheck(&mh, &u.Meta)
+	cores.InputParamsCheck(&mh, &u.Meta)
 
 	//------------------------验证参数start------------------------
 	//初始化验证
