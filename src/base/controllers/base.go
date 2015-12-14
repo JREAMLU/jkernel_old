@@ -14,6 +14,7 @@ type NestPreparer interface {
 
 type baseController struct {
 	beego.Controller
+	i18n.Locale
 }
 
 type langType struct {
@@ -40,6 +41,9 @@ func (this *baseController) Prepare() {
 			return
 		}
 	}
+
+	// beego.Trace("00000000000000:", i18n.Tr("zh-CN", "PARAMSILLEGAL"))
+
 }
 
 func GoGetAllAppConfig() map[string]interface{} {
@@ -64,4 +68,22 @@ func (this *baseController) GoGetProjectName() string {
 
 func (this *baseController) GogetUrlDomain() string {
 	return beego.AppConfig.String("ShortUrl")
+}
+
+func (this *baseController) Tr(format string) string {
+	var language = ""
+	al := this.Ctx.Request.Header.Get("Accept-Language")
+	if len(al) > 4 {
+		al = al[:5] // Only compare first 5 letters.
+		if i18n.IsExist(al) {
+			language = al
+		}
+	}
+
+	if len(language) == 0 {
+		language = "en-US"
+	}
+
+	fmt.Println("6666666666666666", language)
+	return i18n.Tr(language, format)
 }

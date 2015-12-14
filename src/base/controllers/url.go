@@ -17,6 +17,8 @@ type UrlController struct {
  *	@todo 		参数验证, 封装返回
  */
 func (r *UrlController) GoShorten() {
+	fmt.Println("9999999999999999999999999", r.Tr("outputParams.PARAMSILLEGAL"))
+
 	//接受参数 json raw
 	rawDataBody := r.Ctx.Input.RequestBody
 	rawMetaHeader := r.Ctx.Input.Request.Header
