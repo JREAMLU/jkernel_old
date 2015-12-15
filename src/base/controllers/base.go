@@ -41,9 +41,6 @@ func (this *baseController) Prepare() {
 			return
 		}
 	}
-
-	// beego.Trace("00000000000000:", i18n.Tr("zh-CN", "PARAMSILLEGAL"))
-
 }
 
 func GoGetAllAppConfig() map[string]interface{} {
@@ -84,6 +81,5 @@ func (this *baseController) Tr(format string) string {
 		language = "en-US"
 	}
 
-	fmt.Println("6666666666666666", language)
 	return i18n.Tr(language, format)
 }

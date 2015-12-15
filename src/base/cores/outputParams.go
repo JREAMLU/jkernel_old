@@ -18,7 +18,12 @@ type outputParams struct {
 
 var Lang string
 
-var StatusCode = map[int]string{SUCCESS: i18n.Tr(Lang, "outputParams.SUCCESS"), PARAMSILLEGAL: "参数错误", LOGICILLEGAL: "逻辑错误", SYSTEMILLEGAL: "系统错误"}
+var StatusCode = map[int]string{
+	SUCCESS:       i18n.Tr(Lang, "outputParams.SUCCESS"),
+	PARAMSILLEGAL: i18n.Tr(Lang, "outputParams.PARAMSILLEGAL"),
+	LOGICILLEGAL:  i18n.Tr(Lang, "outputParams.LOGICILLEGAL"),
+	SYSTEMILLEGAL: i18n.Tr(Lang, "outputParams.SYSTEMILLEGAL"),
+}
 
 type Output struct {
 	Meta       MetaList
