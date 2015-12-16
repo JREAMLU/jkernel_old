@@ -1,28 +1,23 @@
 package cores
 
 import (
-	"github.com/astaxie/beego"
+	"base/cores/global"
+
 	"github.com/beego/i18n"
 )
 
 const (
 	SUCCESS       = 0
-	PARAMSILLEGAL = 10000 //参数错误
-	LOGICILLEGAL  = 20000 //逻辑错误
-	SYSTEMILLEGAL = 30000 //系统错误
+	PARAMSILLEGAL = 10000
+	LOGICILLEGAL  = 20000
+	SYSTEMILLEGAL = 30000
 )
 
-type outputParams struct {
-	beego.Controller
-}
-
-var Lang string
-
 var StatusCode = map[int]string{
-	SUCCESS:       i18n.Tr(Lang, "outputParams.SUCCESS"),
-	PARAMSILLEGAL: i18n.Tr(Lang, "outputParams.PARAMSILLEGAL"),
-	LOGICILLEGAL:  i18n.Tr(Lang, "outputParams.LOGICILLEGAL"),
-	SYSTEMILLEGAL: i18n.Tr(Lang, "outputParams.SYSTEMILLEGAL"),
+	SUCCESS:       i18n.Tr(global.Lang, "outputParams.SUCCESS"),
+	PARAMSILLEGAL: i18n.Tr(global.Lang, "outputParams.PARAMSILLEGAL"),
+	LOGICILLEGAL:  i18n.Tr(global.Lang, "outputParams.LOGICILLEGAL"),
+	SYSTEMILLEGAL: i18n.Tr(global.Lang, "outputParams.SYSTEMILLEGAL"),
 }
 
 type Output struct {
@@ -41,20 +36,6 @@ type MetaList struct {
 type dataList struct {
 	Total int                    `json:"total"`
 	List  map[string]interface{} `json:"list"`
-}
-
-func (op *outputParams) init() {
-	al := op.Ctx.Request.Header.Get("Accept-Language")
-	if len(al) > 4 {
-		al = al[:5] // Only compare first 5 letters.
-		if i18n.IsExist(al) {
-			Lang = al
-		}
-	}
-
-	if len(Lang) == 0 {
-		Lang = "en-US"
-	}
 }
 
 /**

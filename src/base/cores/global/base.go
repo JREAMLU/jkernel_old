@@ -1,4 +1,4 @@
-package controllers
+package global
 
 import (
 	"fmt"
@@ -12,7 +12,7 @@ type NestPreparer interface {
 	NestPrepare()
 }
 
-type baseController struct {
+type BaseController struct {
 	beego.Controller
 	i18n.Locale
 }
@@ -22,7 +22,22 @@ type langType struct {
 	Name string
 }
 
-func (this *baseController) Prepare() {
+var Lang string
+
+func (this *BaseController) Prepare() {
+	//Accept-Language
+	acceptLanguage := this.Ctx.Request.Header.Get("Accept-Language")
+	if len(acceptLanguage) > 4 {
+		acceptLanguage = acceptLanguage[:5] // Only compare first 5 letters.
+		if i18n.IsExist(acceptLanguage) {
+			Lang = acceptLanguage
+		}
+	}
+
+	if len(Lang) == 0 {
+		Lang = "en-US"
+	}
+
 	// Initialized language type list.
 	langs := strings.Split(beego.AppConfig.String("lang::types"), "|")
 	names := strings.Split(beego.AppConfig.String("lang::names"), "|")
@@ -36,7 +51,7 @@ func (this *baseController) Prepare() {
 
 	for _, lang := range langs {
 		beego.Trace("Loading language: " + lang)
-		if err := i18n.SetMessage(lang, "conf/"+"locale_"+lang+".ini"); err != nil {
+		if err := i18n.SetMessage(lang, "lang/"+"locale_"+lang+".ini"); err != nil {
 			beego.Error("Fail to set message file: " + err.Error())
 			return
 		}
@@ -55,31 +70,22 @@ func GoGetAllAppConfig() map[string]interface{} {
 	return core
 }
 
-func (this *baseController) GoGetAuthor() string {
+func (this *BaseController) GoGetAuthor() string {
 	return beego.AppConfig.String("core::author")
 }
 
-func (this *baseController) GoGetProjectName() string {
+func (this *BaseController) GoGetProjectName() string {
 	return beego.AppConfig.String("core::ProjectName")
 }
 
-func (this *baseController) GogetUrlDomain() string {
+func (this *BaseController) GogetUrlDomain() string {
 	return beego.AppConfig.String("ShortUrl")
 }
 
-func (this *baseController) Tr(format string) string {
-	var language = ""
-	al := this.Ctx.Request.Header.Get("Accept-Language")
-	if len(al) > 4 {
-		al = al[:5] // Only compare first 5 letters.
-		if i18n.IsExist(al) {
-			language = al
-		}
-	}
+func (this *BaseController) Tr(format string) string {
+	return i18n.Tr(Lang, format)
+}
 
-	if len(language) == 0 {
-		language = "en-US"
-	}
-
-	return i18n.Tr(language, format)
+func GetLang() string {
+	return Lang
 }

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"base/cores/global"
 	"base/services"
 	"fmt"
 
@@ -10,9 +11,25 @@ import (
 )
 
 type UrlController struct {
-	baseController
+	global.BaseController
 }
 
+/**
+{
+    "data": {
+        "urls": [
+            {
+                "LongUrl": "http://o9d.cn",
+                "IP": "127.0.0.1"
+            },
+            {
+                "LongUrl": "http://huiyimei.com",
+                "IP": "192.168.1.1   "
+            }
+        ]
+    }
+}
+*/
 /**
  *	@auther		jream.lu
  *	@url		https://base.jream.lu/v1/url/goshorten.json

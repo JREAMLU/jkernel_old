@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"hash/crc32"
 	"hash/crc64"
+
+	"base/cores/global"
 )
 
 type LongController struct {
-	baseController
+	global.BaseController
 }
 
 /**

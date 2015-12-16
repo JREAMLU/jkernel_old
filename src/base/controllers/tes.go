@@ -1,13 +1,14 @@
 package controllers
 
 import (
+	"base/cores/global"
 	"fmt"
 
 	//"github.com/astaxie/beego/validation"
 )
 
 type TesController struct {
-	baseController
+	global.BaseController
 }
 
 func (t *TesController) Post() {

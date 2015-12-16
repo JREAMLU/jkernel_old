@@ -22,6 +22,7 @@ type Url struct {
 type DataParams struct {
 	Urls []UrlsParams `valid:"Required"`
 }
+
 type UrlsParams struct {
 	LongUrl string `valid:"Required"`
 	IP      string `valid:"IP"`
@@ -59,11 +60,12 @@ func (r *Url) GoShorten(rawMetaHeader map[string][]string, rawDataBody []byte) (
 	//将传递过来多json raw解析到struct
 	var u Url
 	ffjson.Unmarshal(rawDataBody, &u)
-	ffjson.Unmarshal(rawDataBody, &u.Data.Urls)
+	// ffjson.Unmarshal(rawDataBody, &u.Data.Urls)
+
 	fmt.Println("Url json解析:", u)
 
 	//测试嵌套验证
-	cores.InputParamsCheck(rawMetaHeader, &u.Data.Urls)
+	cores.InputParamsCheck(rawMetaHeader, &u.Data)
 
 	/*
 		//------------------------验证参数start------------------------
