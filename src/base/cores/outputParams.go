@@ -1,13 +1,24 @@
 package cores
 
-const (
-	SUCCESS       = 0
-	PARAMSILLEGAL = 10000 //参数错误
-	LOGICILLEGAL  = 20000 //逻辑错误
-	SYSTEMILLEGAL = 30000 //系统错误
+import (
+	"base/cores/global"
+
+	"github.com/beego/i18n"
 )
 
-var StatusCode = map[int]string{SUCCESS: "SUCCESS", PARAMSILLEGAL: "参数错误", LOGICILLEGAL: "逻辑错误", SYSTEMILLEGAL: "系统错误"}
+const (
+	SUCCESS       = 0
+	PARAMSILLEGAL = 10000
+	LOGICILLEGAL  = 20000
+	SYSTEMILLEGAL = 30000
+)
+
+var StatusCode = map[int]string{
+	SUCCESS:       i18n.Tr(global.Lang, "outputParams.SUCCESS"),
+	PARAMSILLEGAL: i18n.Tr(global.Lang, "outputParams.PARAMSILLEGAL"),
+	LOGICILLEGAL:  i18n.Tr(global.Lang, "outputParams.LOGICILLEGAL"),
+	SYSTEMILLEGAL: i18n.Tr(global.Lang, "outputParams.SYSTEMILLEGAL"),
+}
 
 type Output struct {
 	Meta       MetaList

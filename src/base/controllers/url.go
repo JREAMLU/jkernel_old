@@ -1,16 +1,35 @@
 package controllers
 
 import (
+	"base/cores/global"
 	"base/services"
 	"fmt"
+
+	"github.com/astaxie/beego"
 
 	//"encoding/json"
 )
 
 type UrlController struct {
-	baseController
+	global.BaseController
 }
 
+/**
+{
+    "data": {
+        "urls": [
+            {
+                "LongUrl": "http://o9d.cn",
+                "IP": "127.0.0.1"
+            },
+            {
+                "LongUrl": "http://huiyimei.com",
+                "IP": "192.168.1.1   "
+            }
+        ]
+    }
+}
+*/
 /**
  *	@auther		jream.lu
  *	@url		https://base.jream.lu/v1/url/goshorten.json
@@ -18,15 +37,15 @@ type UrlController struct {
  */
 func (r *UrlController) GoShorten() {
 	//接受参数 json raw
-	rawDataBody := r.Ctx.Input.RequestBody
 	rawMetaHeader := r.Ctx.Input.Request.Header
-	for key, val := range rawMetaHeader {
-		fmt.Println(key, ": ", val[0])
-	}
+	rawDataBody := r.Ctx.Input.RequestBody
+
+	//记录参数日志
+	beego.Trace("入参body:" + string(rawDataBody))
 
 	//调用servcie方法, 将参数传递过去
 	var su services.Url
-	shorten, err := su.GoShorten(rawDataBody, rawMetaHeader)
+	shorten, err := su.GoShorten(rawMetaHeader, rawDataBody)
 
 	var data = make(map[string]interface{})
 	if err.Err != nil {
