@@ -62,6 +62,7 @@ func (r *Url) GoShorten(rawMetaHeader map[string][]string, rawDataBody []byte) (
 	ffjson.Unmarshal(rawDataBody, &u)
 	// ffjson.Unmarshal(rawDataBody, &u.Data.Urls)
 
+	//日志
 	fmt.Println("Url json解析:", u)
 
 	//测试嵌套验证

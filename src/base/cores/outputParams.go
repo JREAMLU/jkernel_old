@@ -7,17 +7,19 @@ import (
 )
 
 const (
-	SUCCESS       = 0
-	PARAMSILLEGAL = 10000
-	LOGICILLEGAL  = 20000
-	SYSTEMILLEGAL = 30000
+	SUCCESS           = 0
+	DATAPARAMSILLEGAL = 10000
+	METAPARAMSILLEGAL = 15000
+	LOGICILLEGAL      = 20000
+	SYSTEMILLEGAL     = 30000
 )
 
 var StatusCode = map[int]string{
-	SUCCESS:       i18n.Tr(global.Lang, "outputParams.SUCCESS"),
-	PARAMSILLEGAL: i18n.Tr(global.Lang, "outputParams.PARAMSILLEGAL"),
-	LOGICILLEGAL:  i18n.Tr(global.Lang, "outputParams.LOGICILLEGAL"),
-	SYSTEMILLEGAL: i18n.Tr(global.Lang, "outputParams.SYSTEMILLEGAL"),
+	SUCCESS:           i18n.Tr(global.Lang, "outputParams.SUCCESS"),
+	DATAPARAMSILLEGAL: i18n.Tr(global.Lang, "outputParams.DATAPARAMSILLEGAL"),
+	METAPARAMSILLEGAL: i18n.Tr(global.Lang, "outputParams.DATAPARAMSILLEGAL"),
+	LOGICILLEGAL:      i18n.Tr(global.Lang, "outputParams.LOGICILLEGAL"),
+	SYSTEMILLEGAL:     i18n.Tr(global.Lang, "outputParams.SYSTEMILLEGAL"),
 }
 
 type Output struct {
