@@ -17,7 +17,7 @@ type MetaHeader struct {
 	SecretKey []string `valid:"Required"`
 	RequestID []string `valid:"Required"`
 	Token     []string `valid:"Required"`
-	IP        []string `valid:"IP"`
+	IP        []string `valid:"Required"`
 }
 
 /**
@@ -25,7 +25,8 @@ type MetaHeader struct {
  *	@intro		入参验证
  *	@logic
  *	@todo		返回值
- *	@data		data ...interface{}	切片指针
+ *	@meta		meta map[string][]string	   rawMetaHeader
+ *	@data		data ...interface{}	切片指针	rawDataBody
  *	@return 	?
  */
 func InputParamsCheck(meta map[string][]string, data ...interface{}) int {
@@ -37,6 +38,7 @@ func InputParamsCheck(meta map[string][]string, data ...interface{}) int {
 
 		//日志
 
+		//检查参数
 		if err != nil {
 			// handle error
 			log.Println(i18n.Tr(global.Lang, "outputParams.SYSTEMILLEGAL"), err)
@@ -44,7 +46,7 @@ func InputParamsCheck(meta map[string][]string, data ...interface{}) int {
 
 		if !is {
 			for _, err := range valid.Errors {
-				log.Println(i18n.Tr(global.Lang, "outputParams.PARAMSILLEGAL"), err.Key, ":", err.Message)
+				log.Println(i18n.Tr(global.Lang, "outputParams.DATAPARAMSILLEGAL"), err.Key, ":", err.Message)
 			}
 		}
 	}
@@ -59,13 +61,41 @@ func InputParamsCheck(meta map[string][]string, data ...interface{}) int {
  * 1.map转json
  * 2.json转slice
  * 3.解析到struct
+ * 4.将header 放入map 返回
+ *
+ * @meta 	meta  map[string][]string 	header信息 map格式
  */
 func MetaHeaderCheck(meta map[string][]string) int {
 	rawMetaHeader, _ := ffjson.Marshal(meta)
 	beego.Trace("入参meta:" + string(rawMetaHeader))
 	var metaHeader MetaHeader
 	ffjson.Unmarshal(rawMetaHeader, &metaHeader)
+
+	//日志
 	fmt.Println("meta json解析:", metaHeader)
+	for key, val := range meta {
+		fmt.Println("meta 解析", key, ":", val[0])
+	}
+
+	valid := validation.Validation{}
+
+	is, err := valid.Valid(&metaHeader)
+
+	//日志
+
+	//检查参数
+	if err != nil {
+		// handle error
+		log.Println(i18n.Tr(global.Lang, "outputParams.SYSTEMILLEGAL"), err)
+	}
+
+	if !is {
+		for _, err := range valid.Errors {
+			log.Println(i18n.Tr(global.Lang, "outputParams.METAPARAMSILLEGAL"), err.Key, ":", err.Message)
+		}
+	}
+
+	//把meta参数放入新的struct 返回
 
 	return 1
 }
