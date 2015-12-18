@@ -66,7 +66,11 @@ func (r *Url) GoShorten(rawMetaHeader map[string][]string, rawDataBody []byte) (
 	fmt.Println("Url json解析:", u)
 
 	//测试嵌套验证
-	cores.InputParamsCheck(rawMetaHeader, &u.Data)
+	checkedMessage, err := cores.InputParamsCheck(rawMetaHeader, &u.Data)
+	if err != nil {
+		fmt.Println("err----------", checkedMessage)
+	}
+	fmt.Println("checked----------", checkedMessage)
 
 	/*
 		//------------------------验证参数start------------------------
