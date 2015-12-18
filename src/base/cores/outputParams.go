@@ -2,6 +2,7 @@ package cores
 
 import (
 	"base/cores/global"
+	"time"
 
 	"github.com/beego/i18n"
 )
@@ -24,8 +25,8 @@ var StatusCode = map[int]string{
 
 type Output struct {
 	Meta       MetaList
-	StatusCode int    `json:"status_code"`
-	Message    string `json:"message"`
+	StatusCode int         `json:"status_code"`
+	Message    interface{} `json:"message"`
 	Data       dataList
 }
 
@@ -48,9 +49,17 @@ type dataList struct {
  *	@params		params ...interface{}	切片指针
  *	@return 	?
  */
-func OutputSucc(o Output) Output {
-	o.Meta.RequestId = "abc-111"
-	return o
+func OutputSuccess(msg interface{}) Output {
+	var op Output
+	op.Meta.RequestId = "abc-111"
+	op.Meta.CreatedAt = time.Now().Format("2006-01-02 15:04:05")
+	op.Meta.UpdatedAt = time.Now().Format("2006-01-02 15:04:05")
+
+	op.StatusCode = SUCCESS
+
+	op.Message = msg
+
+	return op
 }
 
 func OutputFail() {

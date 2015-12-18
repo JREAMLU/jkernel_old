@@ -13,12 +13,12 @@ import (
 )
 
 type MetaHeader struct {
-	Source    []string `valid:"Required"`
-	Version   []string `valid:"Required"`
-	SecretKey []string `valid:"Required"`
-	RequestID []string
-	Token     []string `valid:"Required"`
-	IP        []string `valid:"Required"`
+	Source    []string `json:"source" valid:"Required"`
+	Version   []string `json:"version" valid:"Required"`
+	SecretKey []string `json:"secret_key" valid:"Required"`
+	RequestID []string `json:"request_id" valid:"Required"`
+	Token     []string `json:"token" valid:"Required"`
+	IP        []string `json:"ip" valid:"Required"`
 }
 
 /**
@@ -111,8 +111,8 @@ func MetaHeaderCheck(meta map[string][]string) (metaCheckResult interface{}, err
 	}
 
 	//日志
-	if len(metaMap["Requestid"]) == 0 {
-		metaMap["Requestid"] = getRequestID()
+	if len(metaMap["request_id"]) == 0 {
+		metaMap["request_id"] = getRequestID()
 	}
 
 	return metaMap, nil
