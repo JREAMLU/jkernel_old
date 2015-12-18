@@ -27,9 +27,9 @@ type MetaHeader struct {
  *	@todo		返回值
  *	@meta		meta map[string][]string	   rawMetaHeader
  *	@data		data ...interface{}	切片指针	rawDataBody
- *	@return 	?
+ *	@return 	返回 true, metaMap, error
  */
-func InputParamsCheck(meta map[string][]string, data ...interface{}) int {
+func InputParamsCheck(meta map[string][]string, data ...interface{}) (int, map[string]string) {
 	//DataParams check
 	valid := validation.Validation{}
 
@@ -52,8 +52,8 @@ func InputParamsCheck(meta map[string][]string, data ...interface{}) int {
 	}
 
 	//MetaHeader check
-	MetaHeaderCheck(meta)
-	return 1
+	metaMap, _ := MetaHeaderCheck(meta)
+	return 1, metaMap
 }
 
 /**
@@ -65,7 +65,7 @@ func InputParamsCheck(meta map[string][]string, data ...interface{}) int {
  *
  * @meta 	meta  map[string][]string 	header信息 map格式
  */
-func MetaHeaderCheck(meta map[string][]string) int {
+func MetaHeaderCheck(meta map[string][]string) (map[string]string, int) {
 	rawMetaHeader, _ := ffjson.Marshal(meta)
 	beego.Trace("入参meta:" + string(rawMetaHeader))
 	var metaHeader MetaHeader
@@ -96,8 +96,14 @@ func MetaHeaderCheck(meta map[string][]string) int {
 	}
 
 	//把meta参数放入新的struct 返回
+	var metaMap = make(map[string]string)
+	for key, val := range meta {
+		metaMap[key] = val[0]
+	}
 
-	return 1
+	//日志
+
+	return metaMap, 1
 }
 
 //request id增加
