@@ -20,12 +20,12 @@ type Url struct {
 }
 
 type DataParams struct {
-	Urls []UrlsParams `valid:"Required"`
+	Urls []UrlsParams `json:"urls" valid:"Required"`
 }
 
 type UrlsParams struct {
-	LongUrl string `valid:"Required"`
-	IP      string `valid:"IP"`
+	LongUrl string `json:"long_url" valid:"Required"`
+	IP      string `json:"ip" valid:"IP"`
 }
 
 type ErrParams struct {
@@ -66,75 +66,12 @@ func (r *Url) GoShorten(rawMetaHeader map[string][]string, rawDataBody []byte) (
 	fmt.Println("Url json解析:", u)
 
 	//测试嵌套验证
-	cores.InputParamsCheck(rawMetaHeader, &u.Data)
-
-	/*
-		//------------------------验证参数start------------------------
-		//初始化验证
-		validMetaData := validation.Validation{}
-		validMeta := validation.Validation{}
-		validData := validation.Validation{}
-
-		//验证url下的meta,data
-		vMetaData, errMD := validMetaData.Valid(&u)
-		if errMD != nil {
-			fmt.Println("meta,data: ", errMD)
-			errParams.Err = errMD
-			errParams.Message = "error"
-			errParams.Status = 30000
-			return "", errParams
-		}
-		if !vMetaData {
-			for _, err := range validMetaData.Errors {
-				fmt.Println("meta,data: ", err.Key, ":", err.Message)
-				errParams.Status = 10000
-				errParams.Err = errors.New(err.Key + ":" + err.Message)
-				errParams.Message = err.Key + ":" + err.Message
-				return "", errParams
-			}
-		}
-
-		//验证meta信息
-
-		vMeta, errM := validMeta.Valid(&u.Meta)
-		if errM != nil {
-			fmt.Println("meta: ", errM)
-			errParams.Err = errM
-			errParams.Message = "error"
-			errParams.Status = 30000
-			return "", errParams
-		}
-		if !vMeta {
-			for _, err := range validMeta.Errors {
-				fmt.Println("meta: ", err.Key, ":", err.Message)
-				errParams.Status = 10000
-				errParams.Err = errors.New(err.Key + ":" + err.Message)
-				errParams.Message = err.Key + ":" + err.Message
-				return "", errParams
-			}
-		}
-
-		//验证data信息
-		vData, errD := validData.Valid(&u.Data)
-		if errD != nil {
-			fmt.Println("data: ", errD)
-			errParams.Err = errD
-			errParams.Message = "error"
-			errParams.Status = 30000
-			return "", errParams
-		}
-		if !vData {
-			for _, err := range validData.Errors {
-				fmt.Println("data: ", err.Key, ":", err.Message)
-				errParams.Status = 10000
-				errParams.Err = errors.New(err.Key + ":" + err.Message)
-				errParams.Message = err.Key + ":" + err.Message
-				return "", errParams
-			}
-		}
-
-		//------------------------验证参数end------------------------
-	*/
+	checkedMessage, err := cores.InputParamsCheck(rawMetaHeader, &u.Data)
+	if err != nil {
+		fmt.Println("err----------", checkedMessage)
+		cores.OutputSuccess(checkedMessage)
+	}
+	fmt.Println("checked----------", checkedMessage)
 
 	//进行shorten
 	var list = make(map[string]interface{})
