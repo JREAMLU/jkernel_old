@@ -3,7 +3,6 @@ package controllers
 import (
 	"base/cores/global"
 	"base/services"
-	"fmt"
 
 	"github.com/astaxie/beego"
 
@@ -19,11 +18,11 @@ type UrlController struct {
     "data": {
         "urls": [
             {
-                "LongUrl": "http://o9d.cn",
+                "long_url": "http://o9d.cn",
                 "IP": "127.0.0.1"
             },
             {
-                "LongUrl": "http://huiyimei.com",
+                "long_url": "http://huiyimei.com",
                 "IP": "192.168.1.1   "
             }
         ]
@@ -45,23 +44,9 @@ func (r *UrlController) GoShorten() {
 
 	//调用servcie方法, 将参数传递过去
 	var su services.Url
-	shorten, err := su.GoShorten(rawMetaHeader, rawDataBody)
+	shorten := su.GoShorten(rawMetaHeader, rawDataBody)
 
-	var data = make(map[string]interface{})
-	if err.Err != nil {
-		fmt.Println(err.Status, "-", err.Message)
-
-		data["meta"] = ""
-		data["status"] = err.Status
-		data["data"] = err.Message
-	} else {
-		//定义json输出值
-		data["meta"] = ""
-		data["status"] = 0
-		data["data"] = shorten
-	}
-
-	r.Data["json"] = data
+	r.Data["json"] = shorten
 	r.ServeJson()
 
 }
