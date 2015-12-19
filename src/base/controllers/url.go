@@ -30,12 +30,13 @@ type UrlController struct {
 }
 */
 /**
- *	@auther		jream.lu
- *	@url		https://base.jream.lu/v1/url/goshorten.json
- *	@todo 		参数验证, 封装返回
+ *	@auther			jream.lu
+ *	@url			https://base.jream.lu/v1/url/goshorten.json
+ *	@Description 	入参rawMetaHeader, rawDataBody raw形式  meta以header信息传递 data以raw json形式传递
+ *	@todo 			参数验证, 封装返回
  */
 func (r *UrlController) GoShorten() {
-	//接受参数 json raw
+	//入参 meta data
 	rawMetaHeader := r.Ctx.Input.Request.Header
 	rawDataBody := r.Ctx.Input.RequestBody
 
@@ -43,8 +44,8 @@ func (r *UrlController) GoShorten() {
 	beego.Trace("入参body:" + string(rawDataBody))
 
 	//调用servcie方法, 将参数传递过去
-	var su services.Url
-	shorten := su.GoShorten(rawMetaHeader, rawDataBody)
+	var service services.Url
+	shorten := service.GoShorten(rawMetaHeader, rawDataBody)
 
 	r.Data["json"] = shorten
 	r.ServeJson()
