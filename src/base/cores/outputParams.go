@@ -15,19 +15,11 @@ const (
 	SYSTEMILLEGAL     = 30000
 )
 
-var StatusCode = map[int]string{
-	SUCCESS:           i18n.Tr(global.Lang, "outputParams.SUCCESS"),
-	DATAPARAMSILLEGAL: i18n.Tr(global.Lang, "outputParams.DATAPARAMSILLEGAL"),
-	METAPARAMSILLEGAL: i18n.Tr(global.Lang, "outputParams.DATAPARAMSILLEGAL"),
-	LOGICILLEGAL:      i18n.Tr(global.Lang, "outputParams.LOGICILLEGAL"),
-	SYSTEMILLEGAL:     i18n.Tr(global.Lang, "outputParams.SYSTEMILLEGAL"),
-}
-
 type Output struct {
-	Meta       MetaList
+	Meta       MetaList    `json:"meta"`
 	StatusCode int         `json:"status_code"`
 	Message    interface{} `json:"message"`
-	Data       dataList
+	Data       interface{} `json:"data"`
 }
 
 type MetaList struct {
@@ -36,10 +28,12 @@ type MetaList struct {
 	UpdatedAt string `json:"updated_at"`
 }
 
+/*
 type dataList struct {
 	Total int                    `json:"total"`
 	List  map[string]interface{} `json:"list"`
 }
+*/
 
 /**
  *	@auther		jream.lu
@@ -49,7 +43,7 @@ type dataList struct {
  *	@params		params ...interface{}	切片指针
  *	@return 	?
  */
-func OutputSuccess(msg interface{}) Output {
+func OutputSuccess(data interface{}) Output {
 	var op Output
 	op.Meta.RequestId = "abc-111"
 	op.Meta.CreatedAt = time.Now().Format("2006-01-02 15:04:05")
@@ -57,11 +51,35 @@ func OutputSuccess(msg interface{}) Output {
 
 	op.StatusCode = SUCCESS
 
-	op.Message = msg
+	op.Message = i18n.Tr(global.Lang, "outputParams.SUCCESS")
+
+	op.Data = data
 
 	return op
 }
 
-func OutputFail() {
+func OutputFail(msg interface{}, status string) Output {
+	var op Output
+	op.Meta.RequestId = "abc-111"
+	op.Meta.CreatedAt = time.Now().Format("2006-01-02 15:04:05")
+	op.Meta.UpdatedAt = time.Now().Format("2006-01-02 15:04:05")
 
+	switch status {
+	case "SUCCESS":
+		op.StatusCode = SUCCESS
+	case "DATAPARAMSILLEGAL":
+		op.StatusCode = DATAPARAMSILLEGAL
+	case "METAPARAMSILLEGAL":
+		op.StatusCode = METAPARAMSILLEGAL
+	case "LOGICILLEGAL":
+		op.StatusCode = LOGICILLEGAL
+	case "SYSTEMILLEGAL":
+		op.StatusCode = SYSTEMILLEGAL
+	}
+
+	op.Message = msg
+
+	op.Data = make(map[string]interface{})
+
+	return op
 }
