@@ -24,7 +24,6 @@ type Output struct {
 
 type MetaList struct {
 	RequestId string `json:"request_id"`
-	CreatedAt string `json:"created_at"`
 	UpdatedAt string `json:"updated_at"`
 }
 
@@ -43,10 +42,9 @@ type dataList struct {
  *	@params		params ...interface{}	切片指针
  *	@return 	?
  */
-func OutputSuccess(data interface{}) Output {
+func OutputSuccess(data interface{}, requestID string) Output {
 	var op Output
-	op.Meta.RequestId = "abc-111"
-	op.Meta.CreatedAt = time.Now().Format("2006-01-02 15:04:05")
+	op.Meta.RequestId = requestID
 	op.Meta.UpdatedAt = time.Now().Format("2006-01-02 15:04:05")
 
 	op.StatusCode = SUCCESS
@@ -58,10 +56,9 @@ func OutputSuccess(data interface{}) Output {
 	return op
 }
 
-func OutputFail(msg interface{}, status string) Output {
+func OutputFail(msg interface{}, status string, requestID string) Output {
 	var op Output
-	op.Meta.RequestId = "abc-111"
-	op.Meta.CreatedAt = time.Now().Format("2006-01-02 15:04:05")
+	op.Meta.RequestId = requestID
 	op.Meta.UpdatedAt = time.Now().Format("2006-01-02 15:04:05")
 
 	switch status {
