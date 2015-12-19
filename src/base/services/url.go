@@ -28,12 +28,6 @@ type UrlsParams struct {
 	IP      string `json:"ip" valid:"IP"`
 }
 
-type ErrParams struct {
-	Status  int
-	Err     error
-	Message string
-}
-
 type dataList struct {
 	Total int                    `json:"total"`
 	List  map[string]interface{} `json:"list"`
@@ -56,7 +50,7 @@ func (r *Url) Valid(v *validation.Validation) {}
  *	@params		params []byte	参数
  *	@return 	slice
  */
-func (r *Url) GoShorten(rawMetaHeader map[string][]string, rawDataBody []byte) (shortUrl interface{}, errParams ErrParams) {
+func (r *Url) GoShorten(rawMetaHeader map[string][]string, rawDataBody []byte) interface{} {
 	//将传递过来多json raw解析到struct
 	var u Url
 	ffjson.Unmarshal(rawDataBody, &u)
@@ -65,13 +59,11 @@ func (r *Url) GoShorten(rawMetaHeader map[string][]string, rawDataBody []byte) (
 	//日志
 	fmt.Println("Url json解析:", u)
 
-	//测试嵌套验证
+	//参数验证
 	checkedMessage, err := cores.InputParamsCheck(rawMetaHeader, &u.Data)
 	if err != nil {
-		fmt.Println("err----------", checkedMessage)
-		cores.OutputSuccess(checkedMessage)
+		return cores.OutputFail(checkedMessage, "DATAPARAMSILLEGAL")
 	}
-	fmt.Println("checked----------", checkedMessage)
 
 	//进行shorten
 	var list = make(map[string]interface{})
@@ -79,12 +71,11 @@ func (r *Url) GoShorten(rawMetaHeader map[string][]string, rawDataBody []byte) (
 		list[val.LongUrl] = url.GetShortenUrl(val.LongUrl, beego.AppConfig.String("ShortenDomain"))
 	}
 
-	var dl dataList
-	dl.List = list
-	dl.Total = len(list)
+	var data dataList
+	data.List = list
+	data.Total = len(list)
 
 	//持久化到mysql
 
-	errParams.Status = 0
-	return dl, errParams
+	return cores.OutputSuccess(data)
 }
