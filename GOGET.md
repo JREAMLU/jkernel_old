@@ -12,3 +12,5 @@ go get github.com/nsf/gocode
 go get github.com/rogpeppe/godef
 
 go get github.com/pquerna/ffjson
+
+go get github.com/beego/i18n
