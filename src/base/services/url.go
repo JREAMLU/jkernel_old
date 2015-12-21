@@ -60,9 +60,9 @@ func (r *Url) GoShorten(rawMetaHeader map[string][]string, rawDataBody []byte) i
 	fmt.Println("Url json解析:", u)
 
 	//参数验证
-	checked, requestID, msg, err := inout.InputParamsCheck(rawMetaHeader, &u.Data)
+	checked, err := inout.InputParamsCheck(rawMetaHeader, &u.Data)
 	if err != nil {
-		return inout.OutputFail(msg, "DATAPARAMSILLEGAL", requestID)
+		return inout.OutputFail(checked.Message, "DATAPARAMSILLEGAL", checked.RequestID)
 	}
 
 	//进行shorten
@@ -77,5 +77,5 @@ func (r *Url) GoShorten(rawMetaHeader map[string][]string, rawDataBody []byte) i
 
 	//持久化到mysql
 
-	return inout.OutputSuccess(data, checked["request_id"])
+	return inout.OutputSuccess(data, checked.MetaCheckResult["request_id"])
 }
