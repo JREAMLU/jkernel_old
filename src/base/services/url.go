@@ -4,10 +4,10 @@ import (
 
 	//"encoding/json"
 
+	"base/services/atom"
 	"fmt"
 
-	"base/cores"
-	"base/cores/url"
+	"core/inout"
 
 	"github.com/pquerna/ffjson/ffjson"
 
@@ -60,15 +60,15 @@ func (r *Url) GoShorten(rawMetaHeader map[string][]string, rawDataBody []byte) i
 	fmt.Println("Url json解析:", u)
 
 	//参数验证
-	checked, msg, err := cores.InputParamsCheck(rawMetaHeader, &u.Data)
+	checked, msg, err := inout.InputParamsCheck(rawMetaHeader, &u.Data)
 	if err != nil {
-		return cores.OutputFail(msg, "DATAPARAMSILLEGAL", checked["request_id"])
+		return inout.OutputFail(msg, "DATAPARAMSILLEGAL", checked["request_id"])
 	}
 
 	//进行shorten
 	var list = make(map[string]interface{})
 	for _, val := range u.Data.Urls {
-		list[val.LongUrl] = url.GetShortenUrl(val.LongUrl, beego.AppConfig.String("ShortenDomain"))
+		list[val.LongUrl] = atom.GetShortenUrl(val.LongUrl, beego.AppConfig.String("ShortenDomain"))
 	}
 
 	var data dataList
@@ -77,5 +77,5 @@ func (r *Url) GoShorten(rawMetaHeader map[string][]string, rawDataBody []byte) i
 
 	//持久化到mysql
 
-	return cores.OutputSuccess(data, checked["request_id"])
+	return inout.OutputSuccess(data, checked["request_id"])
 }

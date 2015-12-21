@@ -1,7 +1,7 @@
-package cores
+package inout
 
 import (
-	"base/cores/global"
+	"core/global"
 	"time"
 
 	"github.com/beego/i18n"

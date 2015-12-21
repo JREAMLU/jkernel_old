@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"base/cores/global"
+	"core/global"
 	"fmt"
 
 	//"github.com/astaxie/beego/validation"
