@@ -21,8 +21,7 @@ func init() {
 	 */
 	base := beego.NewNamespace("/v1",
 		beego.NSCond(func(ctx *context.Context) bool {
-			if ctx.Input.Domain() == "base.jream.me" {
-				// beego.Trace("[路由]:" + ctx.Input.Request.Header.Get("Version"))
+			if ctx.Input.Domain() == beego.AppConfig.String("baseDomain") {
 				return true
 			}
 			return false

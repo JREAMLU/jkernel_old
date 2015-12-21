@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"base/cores/global"
 	"base/services"
+	"core/global"
 
 	"github.com/astaxie/beego"
 
