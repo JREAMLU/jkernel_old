@@ -100,9 +100,8 @@ func MetaHeaderCheck(meta map[string][]string) (result map[string]string, reques
 		for _, err := range valid.Errors {
 			log.Println(i18n.Tr(global.Lang, "outputParams.METAPARAMSILLEGAL"), err.Key, ":", err.Message)
 			msg := i18n.Tr(global.Lang, "outputParams.METAPARAMSILLEGAL") + " " + err.Key + ":" + err.Message
-			var requestID string
-			if len(meta["request_id"][0]) > 0 {
-				requestID = meta["request_id"][0]
+			if val, ok := meta["request_id"]; ok {
+				requestID = val[0]
 			}
 			return nil, requestID, msg, errors.New(i18n.Tr(global.Lang, "outputParams.METAPARAMSILLEGAL "))
 		}
