@@ -30,7 +30,13 @@ type MetaHeader struct {
  *	@data		data ...interface{}	切片指针	rawDataBody
  *	@return 	返回 true, metaMap, error
  */
-func InputParamsCheck(meta map[string][]string, data ...interface{}) (result map[string]string, msg string, err error) {
+func InputParamsCheck(meta map[string][]string, data ...interface{}) (result map[string]string, requestID string, msg string, err error) {
+	//MetaHeader check
+	metaCheckResult, requestID, msg, err := MetaHeaderCheck(meta)
+	if err != nil {
+		return nil, requestID, msg, err
+	}
+
 	//DataParams check
 	valid := validation.Validation{}
 
@@ -49,18 +55,12 @@ func InputParamsCheck(meta map[string][]string, data ...interface{}) (result map
 			for _, err := range valid.Errors {
 				log.Println(i18n.Tr(global.Lang, "outputParams.DATAPARAMSILLEGAL"), err.Key, ":", err.Message)
 				msg := i18n.Tr(global.Lang, "outputParams.DATAPARAMSILLEGAL") + " " + err.Key + ":" + err.Message
-				return nil, msg, errors.New(i18n.Tr(global.Lang, "outputParams.DATAPARAMSILLEGAL"))
+				return nil, metaCheckResult["request_id"], msg, errors.New(i18n.Tr(global.Lang, "outputParams.DATAPARAMSILLEGAL"))
 			}
 		}
 	}
 
-	//MetaHeader check
-	metaCheckResult, msg, err := MetaHeaderCheck(meta)
-	if err != nil {
-		return nil, msg, err
-	}
-
-	return metaCheckResult, "", nil
+	return metaCheckResult, requestID, "", nil
 }
 
 /**
@@ -72,7 +72,7 @@ func InputParamsCheck(meta map[string][]string, data ...interface{}) (result map
  *
  * @meta 	meta  map[string][]string 	header信息 map格式
  */
-func MetaHeaderCheck(meta map[string][]string) (result map[string]string, msg string, err error) {
+func MetaHeaderCheck(meta map[string][]string) (result map[string]string, requestID string, msg string, err error) {
 	rawMetaHeader, _ := ffjson.Marshal(meta)
 	beego.Trace("入参meta:" + string(rawMetaHeader))
 	var metaHeader MetaHeader
@@ -100,7 +100,11 @@ func MetaHeaderCheck(meta map[string][]string) (result map[string]string, msg st
 		for _, err := range valid.Errors {
 			log.Println(i18n.Tr(global.Lang, "outputParams.METAPARAMSILLEGAL"), err.Key, ":", err.Message)
 			msg := i18n.Tr(global.Lang, "outputParams.METAPARAMSILLEGAL") + " " + err.Key + ":" + err.Message
-			return nil, msg, errors.New(i18n.Tr(global.Lang, "outputParams.METAPARAMSILLEGAL "))
+			var requestID string
+			if len(meta["request_id"][0]) > 0 {
+				requestID = meta["request_id"][0]
+			}
+			return nil, requestID, msg, errors.New(i18n.Tr(global.Lang, "outputParams.METAPARAMSILLEGAL "))
 		}
 	}
 
@@ -115,7 +119,7 @@ func MetaHeaderCheck(meta map[string][]string) (result map[string]string, msg st
 		metaMap["request_id"] = getRequestID()
 	}
 
-	return metaMap, "", nil
+	return metaMap, "", "", nil
 }
 
 //request id增加

@@ -60,9 +60,9 @@ func (r *Url) GoShorten(rawMetaHeader map[string][]string, rawDataBody []byte) i
 	fmt.Println("Url json解析:", u)
 
 	//参数验证
-	checked, msg, err := inout.InputParamsCheck(rawMetaHeader, &u.Data)
+	checked, requestID, msg, err := inout.InputParamsCheck(rawMetaHeader, &u.Data)
 	if err != nil {
-		return inout.OutputFail(msg, "DATAPARAMSILLEGAL", checked["request_id"])
+		return inout.OutputFail(msg, "DATAPARAMSILLEGAL", requestID)
 	}
 
 	//进行shorten
