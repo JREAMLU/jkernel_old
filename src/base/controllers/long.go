@@ -6,7 +6,7 @@ import (
 	"hash/crc32"
 	"hash/crc64"
 
-	"base/cores/global"
+	"core/global"
 )
 
 type LongController struct {
