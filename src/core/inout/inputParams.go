@@ -13,12 +13,13 @@ import (
 )
 
 type MetaHeader struct {
-	Source    []string `json:"source" valid:"Required"`
-	Version   []string `json:"version" valid:"Required"`
-	SecretKey []string `json:"secret_key" valid:"Required"`
-	RequestID []string `json:"request_id" valid:"Required"`
-	Token     []string `json:"token" valid:"Required"`
-	IP        []string `json:"ip" valid:"Required"`
+	Source      []string `json:"source" valid:"Required"`
+	Version     []string `json:"version" valid:"Required"`
+	SecretKey   []string `json:"secret_key" valid:"Required"`
+	RequestID   []string `json:"request_id" valid:"Required"`
+	ContentType []string `json:"Content-Type" valid:"Required"`
+	Token       []string `json:"token" valid:"Required"`
+	IP          []string `json:"ip" valid:"Required"`
 }
 
 type Result struct {
@@ -97,6 +98,18 @@ func MetaHeaderCheck(meta map[string][]string) (result Result, err error) {
 	is, err := valid.Valid(&metaHeader)
 
 	//日志
+
+	//Content-Type
+	if val, ok := meta["Content-Type"]; ok {
+		if val[0] != beego.AppConfig.String("Content-Type") {
+			result.MetaCheckResult = nil
+			result.Message = i18n.Tr(global.Lang, "outputParams.CONTENTTYPEILLEGAL")
+			if val, ok := meta["request_id"]; ok {
+				result.RequestID = val[0]
+			}
+			return result, errors.New(i18n.Tr(global.Lang, "outputParams.CONTENTTYPEILLEGAL "))
+		}
+	}
 
 	//检查参数
 	if err != nil {
