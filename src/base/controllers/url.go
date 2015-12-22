@@ -23,7 +23,7 @@ type UrlController struct {
             },
             {
                 "long_url": "http://huiyimei.com",
-                "IP": "192.168.1.1   "
+                "IP": "192.168.1.1"
             }
         ]
     }
