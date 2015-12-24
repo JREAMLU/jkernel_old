@@ -77,5 +77,5 @@ func (r *Url) GoShorten(rawMetaHeader map[string][]string, rawDataBody []byte) i
 
 	//持久化到mysql
 
-	return inout.OutputSuccess(data, checked.MetaCheckResult["request_id"])
+	return inout.OutputSuccess(data, checked.MetaCheckResult["Request-Id"])
 }

@@ -23,7 +23,7 @@ type Output struct {
 }
 
 type MetaList struct {
-	RequestId string `json:"request_id"`
+	RequestId string `json:"Request-Id"`
 	UpdatedAt string `json:"updated_at"`
 }
 
