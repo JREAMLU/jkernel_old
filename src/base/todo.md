@@ -27,30 +27,34 @@ SOA:
 		全部走redis
 
 技术疑问:
-	0.路由				√
-		namespace		√
-			疑问			√
-			NSBefore
-			NSAfter
-			路由域名		√
+	0.路由					  			 √
+		namespace		  				√
+		疑问								√
+		NSBefore 
+		NSAfter
+		路由域名						√
 	1.参数以及验证
-		baseController
-			验证json的合法性 			√
-		多维的meta data 			√
-		json相关知识
-			dataParams为数组: 定义struct  √
-		接受的参数		√
-		参数的验证
-		映射到struct 		√
-		struct里的验证 		√
-			继承数组验证 		√
-		错误机制的封装 		√
-	2.baseConrtoller		√
-	3.filter
-	5.mysql
-	6.redis
-	7.日志
-	8.错误页面
-	9.代码提示
-	10.封装返回 			√
-    11.ffjson				√
+		验证json的合法性 						√
+		多维的meta data 					  √
+		json相关知识 				 		 √
+		dataParams为数组: 定义struct  		 √
+		接受的参数							√
+		参数的验证							√
+		映射到struct 							√
+		struct里的验证 							√
+		继承数组验证 								√
+		错误机制的封装 						√
+		Content-Type验证					√
+2.baseConrtoller						√
+3.filter
+签名验证
+goworker
+5.mysql
+6.redis
+7.日志
+	基于队列 RabbitMQ
+	MongoDB
+8.错误页面
+9.代码提示 							√
+10.封装返回 						√
+11.ffjson							√
