@@ -14,6 +14,16 @@ type UrlController struct {
 }
 
 /**
+HEADER:
+	Accept-Language: zh-CN
+	source: Advanced Rest Client
+	version: 1.0
+	Secret-Key: ABDEFGHIJKLMNOPQRSTUVWXYZ
+	Request-Id: AAAAAAAAAAAAAAAAAAAAAAAAA
+	token: ONE-PIECE
+	ip: 192.168.1.1
+
+DATA:
 {
     "data": {
         "urls": [

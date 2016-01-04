@@ -7,7 +7,7 @@ SOA:
 	2.short to long
 
 	3.建表语句
-		CREATE TABLE `base_redirect` (
+		CREATE TABLE `redirect` (
 			`redirect_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '短网址唯一id,自增长',
 			`long_url` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '原始url',
 			`short_url` CHAR(25) NOT NULL DEFAULT '' COMMENT '短url',
@@ -47,10 +47,13 @@ SOA:
 		Content-Type验证					√
 2.baseConrtoller						√
 3.filter
-签名验证
-goworker
 5.mysql
 6.redis
+logs
+test
+返回201
+签名验证
+goworker
 7.日志
 	基于队列 RabbitMQ
 	MongoDB
