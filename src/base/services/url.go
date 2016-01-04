@@ -4,6 +4,7 @@ import (
 
 	//"encoding/json"
 
+	"base/models"
 	"base/services/atom"
 	"fmt"
 
@@ -67,8 +68,22 @@ func (r *Url) GoShorten(rawMetaHeader map[string][]string, rawDataBody []byte) i
 
 	//进行shorten
 	var list = make(map[string]interface{})
+	var params_map = make(map[string]interface{})
+	params := []map[string]interface{}{}
 	for _, val := range u.Data.Urls {
-		list[val.LongUrl] = atom.GetShortenUrl(val.LongUrl, beego.AppConfig.String("ShortenDomain"))
+		shortUrl := atom.GetShortenUrl(val.LongUrl, beego.AppConfig.String("ShortenDomain"))
+		list[val.LongUrl] = shortUrl
+
+		params_map["long_url"] = val.LongUrl
+		params_map["short_url"] = shortUrl
+		params_map["long_crc"] = 1
+		params_map["short_crc"] = 1
+		params_map["status"] = 1
+		params_map["created_by_ip"] = 123
+		params_map["updated_by_ip"] = 123
+		params_map["created_at"] = 456
+		params_map["updated_at"] = 456
+		params = append(params, params_map)
 	}
 
 	var data dataList
@@ -76,6 +91,7 @@ func (r *Url) GoShorten(rawMetaHeader map[string][]string, rawDataBody []byte) i
 	data.Total = len(list)
 
 	//持久化到mysql
+	models.Insert(params)
 
 	return inout.OutputSuccess(data, checked.MetaCheckResult["Request-Id"])
 }
