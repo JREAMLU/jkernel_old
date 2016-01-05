@@ -11,7 +11,6 @@ import (
 func main() {
 	if beego.RunMode == "dev" {
 		beego.DirectoryIndex = true
-		beego.StaticDir["/swagger"] = "swagger"
 	}
 
 	beego.AddFuncMap("i18n", i18n.Tr)
