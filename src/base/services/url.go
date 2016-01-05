@@ -91,7 +91,8 @@ func (r *Url) GoShorten(rawMetaHeader map[string][]string, rawDataBody []byte) i
 	data.Total = len(list)
 
 	//持久化到mysql
-	models.Insert(params)
+	a := models.GetUrlOne()
+	fmt.Println("AAAAAAAAAA", a["long_url"])
 
 	return inout.OutputSuccess(data, checked.MetaCheckResult["Request-Id"])
 }

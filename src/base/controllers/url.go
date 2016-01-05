@@ -41,7 +41,8 @@ DATA:
 */
 /**
  *	@auther			jream.lu
- *	@url			https://base.jream.lu/v1/url/goshorten.json
+ *	@Request		post
+ *	@url			https://base.jream.lu/v1/url/goshorten
  *	@Description 	入参rawMetaHeader, rawDataBody raw形式  meta以header信息传递 data以raw json形式传递
  *	@todo 			参数验证, 封装返回
  */
@@ -59,7 +60,6 @@ func (r *UrlController) GoShorten() {
 
 	r.Data["json"] = shorten
 	r.ServeJson()
-
 }
 
 func (r *UrlController) GoExpand() {
