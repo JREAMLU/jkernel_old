@@ -3,12 +3,23 @@ package models
 import (
 	"core/db/mysql"
 
+	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 )
 
+var (
+	alias      = beego.AppConfig.String("db::alias")
+	driver     = beego.AppConfig.String("db::driver")
+	username   = beego.AppConfig.String("db::username")
+	password   = beego.AppConfig.String("db::password")
+	database   = beego.AppConfig.String("db::database")
+	charset    = beego.AppConfig.String("db::charset")
+	maxIdle, _ = beego.AppConfig.Int("db::maxIdle")
+)
+
 func init() {
-	orm.RegisterDataBase("default", "mysql", "root:@/base?charset=utf8", 30)
+	orm.RegisterDataBase(alias, driver, username+":@/"+database+"?charset="+charset, maxIdle)
 }
 
 func GetUrlOne() orm.Params {
