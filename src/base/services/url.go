@@ -4,7 +4,6 @@ import (
 
 	//"encoding/json"
 
-	"base/models"
 	"base/services/atom"
 	"fmt"
 
@@ -91,8 +90,9 @@ func (r *Url) GoShorten(rawMetaHeader map[string][]string, rawDataBody []byte) i
 	data.Total = len(list)
 
 	//持久化到mysql
-	a := models.GetUrlOne()
-	fmt.Println("AAAAAAAAAA", a["long_url"])
+
+	// a := models.GetUrlOne()
+	// fmt.Println("AAAAAAAAAA", a["long_url"])
 
 	return inout.OutputSuccess(data, checked.MetaCheckResult["Request-Id"])
 }
