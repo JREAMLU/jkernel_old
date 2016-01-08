@@ -14,3 +14,5 @@ go get github.com/rogpeppe/godef
 go get github.com/pquerna/ffjson
 
 go get github.com/beego/i18n
+
+go get github.com/go-xorm/xorm
