@@ -86,6 +86,7 @@ go:
 	logs
 	test
 	返回201
+	调用api方法封装
 	日志
 		goworker
 		往redis里插条数据
