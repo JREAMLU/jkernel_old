@@ -56,8 +56,9 @@ func (r *UrlController) GoShorten() {
 
 	//调用servcie方法, 将参数传递过去
 	var service services.Url
-	shorten := service.GoShorten(rawMetaHeader, rawDataBody)
+	httpStatus, shorten := service.GoShorten(rawMetaHeader, rawDataBody)
 
+	r.Ctx.Output.SetStatus(httpStatus)
 	r.Data["json"] = shorten
 	r.ServeJson()
 }
