@@ -48,9 +48,9 @@ func (r *Url) Valid(v *validation.Validation) {}
  *	@logic
  *	@todo		参数验证抽出去
  *	@params		params []byte	参数
- *	@return 	slice
+ *	@return 	httpStatus lice
  */
-func (r *Url) GoShorten(rawMetaHeader map[string][]string, rawDataBody []byte) interface{} {
+func (r *Url) GoShorten(rawMetaHeader map[string][]string, rawDataBody []byte) (httpStatus int, output interface{}) {
 	//将传递过来多json raw解析到struct
 	var u Url
 	ffjson.Unmarshal(rawDataBody, &u)
@@ -62,7 +62,7 @@ func (r *Url) GoShorten(rawMetaHeader map[string][]string, rawDataBody []byte) i
 	//参数验证
 	checked, err := inout.InputParamsCheck(rawMetaHeader, &u.Data)
 	if err != nil {
-		return inout.OutputFail(checked.Message, "DATAPARAMSILLEGAL", checked.RequestID)
+		return inout.EXPECTATION_FAILED, inout.OutputFail(checked.Message, "DATAPARAMSILLEGAL", checked.RequestID)
 	}
 
 	//进行shorten
@@ -94,5 +94,5 @@ func (r *Url) GoShorten(rawMetaHeader map[string][]string, rawDataBody []byte) i
 	// a := models.GetUrlOne()
 	// fmt.Println("AAAAAAAAAA", a["long_url"])
 
-	return inout.OutputSuccess(data, checked.MetaCheckResult["Request-Id"])
+	return inout.OK, inout.OutputSuccess(data, checked.MetaCheckResult["Request-Id"])
 }
