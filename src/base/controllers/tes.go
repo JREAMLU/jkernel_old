@@ -65,5 +65,5 @@ func (t *TesController) Post() {
 //	}
 
 //	t.Data["json"] = "abc"
-//	t.ServeJson()
+//	t.ServeJSON()
 //}

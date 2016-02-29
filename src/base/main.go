@@ -9,8 +9,8 @@ import (
 )
 
 func main() {
-	if beego.RunMode == "dev" {
-		beego.DirectoryIndex = true
+	if beego.BConfig.RunMode == "dev" {
+		beego.BConfig.WebConfig.DirectoryIndex = true
 	}
 
 	beego.AddFuncMap("i18n", i18n.Tr)

@@ -29,11 +29,13 @@ func init() {
 	// orm.RegisterDataBase(alias, driver, username+":@/"+database+"?charset="+charset, maxIdle)
 	var err error
 	engine, err = xorm.NewEngine(driver, username+":@/"+database+"?charset="+charset)
-	engine.ShowSQL = showSql     //则会在控制台打印出生成的SQL语句；
-	engine.ShowDebug = showDebug //则会在控制台打印调试信息；
-	engine.ShowErr = showErr     //则会在控制台打印错误信息；
-	engine.ShowWarn = showWarn   //则会在控制台打印警告信息；
-	engine.ShowInfo = showInfo
+	/*
+		engine.ShowSQL = showSql     //则会在控制台打印出生成的SQL语句；
+		engine.ShowDebug = showDebug //则会在控制台打印调试信息；
+		engine.ShowErr = showErr     //则会在控制台打印错误信息；
+		engine.ShowWarn = showWarn   //则会在控制台打印警告信息；
+		engine.ShowInfo = showInfo
+	*/
 
 	if err != nil {
 	}
