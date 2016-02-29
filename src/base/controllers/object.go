@@ -23,7 +23,7 @@ func (o *ObjectController) Post() {
 	json.Unmarshal(o.Ctx.Input.RequestBody, &ob)
 	objectid := models.AddOne(ob)
 	o.Data["json"] = map[string]string{"ObjectId": objectid}
-	o.ServeJson()
+	o.ServeJSON()
 }
 
 // @Title Get
@@ -33,7 +33,7 @@ func (o *ObjectController) Post() {
 // @Failure 403 :objectId is empty
 // @router /:objectId [get]
 func (o *ObjectController) Get() {
-	objectId := o.Ctx.Input.Params[":objectId"]
+	objectId := o.Ctx.Input.Param(":objectId")
 	if objectId != "" {
 		ob, err := models.GetOne(objectId)
 		if err != nil {
@@ -42,7 +42,7 @@ func (o *ObjectController) Get() {
 			o.Data["json"] = ob
 		}
 	}
-	o.ServeJson()
+	o.ServeJSON()
 }
 
 // @Title GetAll
@@ -53,7 +53,7 @@ func (o *ObjectController) Get() {
 func (o *ObjectController) GetAll() {
 	obs := models.GetAll()
 	o.Data["json"] = obs
-	o.ServeJson()
+	o.ServeJSON()
 }
 
 // @Title update
@@ -64,7 +64,7 @@ func (o *ObjectController) GetAll() {
 // @Failure 403 :objectId is empty
 // @router /:objectId [put]
 func (o *ObjectController) Put() {
-	objectId := o.Ctx.Input.Params[":objectId"]
+	objectId := o.Ctx.Input.Param(":objectId")
 	var ob models.Object
 	json.Unmarshal(o.Ctx.Input.RequestBody, &ob)
 
@@ -74,7 +74,7 @@ func (o *ObjectController) Put() {
 	} else {
 		o.Data["json"] = "update success!"
 	}
-	o.ServeJson()
+	o.ServeJSON()
 }
 
 // @Title delete
@@ -84,8 +84,8 @@ func (o *ObjectController) Put() {
 // @Failure 403 objectId is empty
 // @router /:objectId [delete]
 func (o *ObjectController) Delete() {
-	objectId := o.Ctx.Input.Params[":objectId"]
+	objectId := o.Ctx.Input.Param(":objectId")
 	models.Delete(objectId)
 	o.Data["json"] = "delete success!"
-	o.ServeJson()
+	o.ServeJSON()
 }

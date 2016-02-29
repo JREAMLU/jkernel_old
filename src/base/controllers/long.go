@@ -22,7 +22,7 @@ func (gl *LongController) GoLong() {
 	//json.Unmarshal(u.Ctx.Input.RequestBody, &user)
 	//uid := models.AddUser(user)
 	//u.Data["json"] = map[string]string{"uid": uid}
-	//u.ServeJson()
+	//u.ServeJSON()
 
 	//var domain models.Domain
 	//json.Unmarshal(st.Ctx.Input.RequestBody, &domain)
@@ -33,7 +33,7 @@ func (gl *LongController) GoLong() {
 	fmt.Println(a)
 
 	gl.Data["json"] = map[string]string{"name": "long"}
-	gl.ServeJson()
+	gl.ServeJSON()
 }
 
 func Jcrc32(str string) uint32 {

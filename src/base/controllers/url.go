@@ -48,7 +48,7 @@ DATA:
  */
 func (r *UrlController) GoShorten() {
 	//入参 meta data
-	rawMetaHeader := r.Ctx.Input.Request.Header
+	rawMetaHeader := r.Ctx.Input.Context.Request.Header
 	rawDataBody := r.Ctx.Input.RequestBody
 
 	//记录参数日志
@@ -60,7 +60,7 @@ func (r *UrlController) GoShorten() {
 
 	r.Ctx.Output.SetStatus(httpStatus)
 	r.Data["json"] = shorten
-	r.ServeJson()
+	r.ServeJSON()
 }
 
 func (r *UrlController) GoExpand() {
